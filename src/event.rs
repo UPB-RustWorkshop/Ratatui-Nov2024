@@ -22,7 +22,7 @@ pub enum Event {
 /// Terminal event handler.
 #[allow(dead_code)]
 #[derive(Debug)]
-pub struct EventHandler {
+pub struct EventsPublisher {
     /// Event sender channel.
     sender: mpsc::UnboundedSender<Event>,
     /// Event receiver channel.
@@ -31,17 +31,17 @@ pub struct EventHandler {
     handler: tokio::task::JoinHandle<()>,
 }
 
-impl EventHandler {
+impl EventsPublisher {
     /// Constructs a new instance of [`EventHandler`].
     pub fn new(tick_rate: u64) -> Self {
         let tick_rate = Duration::from_millis(tick_rate);
 
-        /// Creating a communcation channel between the application and a thread that
-        /// listens for keyboard/mouse events coming from the user
+        // Creating a communcation channel between the application and a thread that
+        // listens for keyboard/mouse events coming from the user
         let (sender, receiver) = mpsc::unbounded_channel();
         let _sender = sender.clone();
 
-        /// Spawning the handler thread that will run in background, should be joined at quit
+        // Spawning the handler thread that will run in background, should be joined at quit
         let handler = tokio::spawn(async move {
             // Events reader stream
             let mut reader = crossterm::event::EventStream::new();
@@ -50,14 +50,17 @@ impl EventHandler {
                 let tick_delay = tick.tick();
                 let crossterm_event = reader.next().fuse();
 
-                /// Concurrent execution branches, first event to finish is returned
+                // Concurrent execution branches, first event to finish is returned
                 tokio::select! {
                   _ = tick_delay => {
                     _sender.send(Event::Tick).unwrap();
                   }
                   Some(Ok(evt)) = crossterm_event => {
                     match evt {
-                      _ => {}
+                      _ => {
+                        // TODO: create an arm for each terminal event you are interested into
+                        // eq: arrow keys pressed, enter key, scroll...
+                      }
                     }
                   }
                 }

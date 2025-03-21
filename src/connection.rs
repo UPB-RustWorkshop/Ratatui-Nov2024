@@ -11,11 +11,10 @@ struct CityInfo {
 pub fn get_data(city: String) {
     match reqwest::blocking::get("") {
         Ok(response) => {
-            // Check status code
-            // Parse response
+            // TODO: Check status code and then parse response
         },
         Err(error) => {
-            // Handle error
+            // TODO: Handle error
         }
     }
 }

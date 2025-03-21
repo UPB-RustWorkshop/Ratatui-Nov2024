@@ -1,5 +1,5 @@
 use crate::app::{App, AppResult};
-use crate::event::EventHandler;
+use crate::event::EventsPublisher;
 use crate::ui;
 use crossterm::event::{DisableMouseCapture, EnableMouseCapture};
 use crossterm::terminal::{self, EnterAlternateScreen, LeaveAlternateScreen};
@@ -17,12 +17,12 @@ pub struct Tui<B: Backend> {
     /// Interface to the Terminal.
     terminal: Terminal<B>,
     /// Terminal event handler.
-    pub events: EventHandler,
+    pub events: EventsPublisher,
 }
 
 impl<B: Backend> Tui<B> {
     /// Constructs a new instance of [`Tui`].
-    pub fn new(terminal: Terminal<B>, events: EventHandler) -> Self {
+    pub fn new(terminal: Terminal<B>, events: EventsPublisher) -> Self {
         Self { terminal, events }
     }
 
@@ -49,9 +49,13 @@ impl<B: Backend> Tui<B> {
     /// [`Draw`] the terminal interface by [`rendering`] the widgets.
     ///
     /// Returns Ok() is no errors occured, Err() otherwhise
-    pub fn draw(&mut self, app: &mut App) {
-        // [`Draw`]: ratatui::Terminal::draw
-        // [`rendering`]: crate::ui:render
+    pub fn draw(&mut self, app: &mut App)  -> AppResult<()> {
+        // TODO: draw the interface on the terminal
+
+        // Hint: [`Draw`]: ratatui::Terminal::draw
+        // Hint: [`rendering`]: crate::ui:render
+
+        Ok(())
     }
 
     /// Resets the terminal interface.
