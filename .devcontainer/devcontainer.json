@@ -1,0 +1,16 @@
+{
+    "build": { "dockerfile": "Dockerfile" },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "rust-lang.rust-analyzer",
+                "tamasfe.even-better-toml",
+                "mutantdino.resourcemonitor",
+                "vadimcn.vscode-lldb"
+            ]
+        }
+    },
+    "containerUser": "codespace",
+    "remoteUser": "codespace",
+    "postCreateCommand": "git submodule update --init"
+}
